@@ -11,18 +11,18 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  // server: {
-  //   proxy: {
-  //     "/api": {
-  //       target: "https://api.recruitment.ziqiang.net.cn/api",
-  //       changeOrigin: true,
-  //       rewrite: (path) => path.replace(/^\/api/, ""),
-  //     },
-  //     "/test": {
-  //       target: "https://api.test.recruitment.ziqiang.net.cn/api",
-  //       changeOrigin: true,
-  //       rewrite: (path) => path.replace(/^\/test/, ""),
-  //     },
-  //   },
-  // },
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://api.recruitment.ziqiang.net.cn/api",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      "/test": {
+        target: "https://api.test.recruitment.ziqiang.net.cn/api",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/test/, ""),
+      },
+    },
+  },
 });

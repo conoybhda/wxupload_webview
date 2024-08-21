@@ -8,7 +8,7 @@ import axios, { AxiosProgressEvent } from "axios";
  */
 export const uploadFile = async (
   f: File,
-  onUploadProgress: (ProgressEvent: AxiosProgressEvent) => void
+  onUploadProgress?: (ProgressEvent: AxiosProgressEvent) => void
 ) => {
   try {
     let getToken = await axios({
@@ -55,4 +55,25 @@ export const uploadFile = async (
   } catch (e) {
     console.log(e);
   }
+};
+
+/**
+ * 模拟上传文件
+ */
+export const uploadFileLocal = async (
+  f: File,
+  onUploadProgress?: (ProgressEvent: AxiosProgressEvent) => void
+) => {
+  for (let i = 0; i <= 100; i+=2) {
+    onUploadProgress &&
+      onUploadProgress({
+        progress: i,
+        bytes: 0,
+        lengthComputable: false,
+        loaded: 0,
+      });
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  console.log("上传成功");
+  return { status: 200 };
 };

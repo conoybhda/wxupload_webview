@@ -1,54 +1,77 @@
 <template>
-  <div :class="'fileListBox ' + (true ? 'box' : 'uploading')">
+  <div :class="'fileListBox ' + nowStatus">
     <text class="fltext">文件列表</text>
+    <text v-if="nowStatus" class="sugMaxCount"
+      >您最多可以选择{{ maxCount }}个文件</text
+    >
     <div class="fileList">
       <fileCard
         class="fileCard"
         v-for="file in fileList"
         v-model="file.isChoosen"
+        :choosable="choosable || file.isChoosen"
         :file="file.file"
       />
     </div>
   </div>
-  <button class="uploadButton" @click="upload">
+  <button v-if="nowStatus == 'uploadFile'" class="uploadButton" @click="upload">
     <text class="buttonText">上传</text>
   </button>
 </template>
 <script setup lang="ts">
+import { maxCount } from "@/api/urlParams";
 import fileCard from "@/components/fileCard.vue";
-import { fileList } from "@/utils/values";
-import { ref } from "vue";
+import { fileList, nowStatus } from "@/utils/values";
+import { computed } from "vue";
+
+const choosable = computed(() => {
+  let res = 0;
+  fileList.value.forEach((file) => {
+    if (file.isChoosen) res++;
+  });
+  return res < maxCount.value;
+});
 
 const upload = () => {
-  console.log("upload");
+  // 筛选选中的文件
+  fileList.value = fileList.value.filter((file) => file.isChoosen);
+  // 切换状态
+  nowStatus.value = "uploading";
 };
 </script>
 <style scoped lang="less">
 .fileListBox {
   transition: all 0.5s;
-  &.box {
+  width: 80vw;
+  &.uploadFile {
     position: relative;
-    margin-left: 10vw;
-    top: 12vh;
-    margin-right: 10vw;
+    margin-top: -15vh;
   }
   &.uploading {
     position: relative;
-    left: 10vw;
-    top: 108vw;
+    margin-top: 20vh;
   }
   .fltext {
     position: relative;
-    font-size: 7vw;
+    font-size: 9vw;
     font-family: Source Han Sans SC-Regular, Source Han Sans SC;
     font-weight: 400;
+    display: block;
     color: #ffffff;
+  }
+  .sugMaxCount {
+    position: relative;
+    font-size: 5vw;
+    font-family: Source Han Sans SC-Regular, Source Han Sans SC;
+    font-weight: 400;
+    display: block;
+    color: #ffffffb6;
   }
   .fileList {
     position: relative;
-    margin-top: 10px;
+    margin-top: 8px;
     width: 100%;
-    max-height: 50vh;
+    max-height: 60vh;
     overflow: auto;
     .fileCard {
       position: relative;
@@ -137,18 +160,23 @@ const upload = () => {
 }
 
 .uploadButton {
+  position: relative;
+  margin-top: 3vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 150vw;
-  left: 36vw;
   width: 28vw;
   height: 13vw;
   background: #ffffffce;
   box-shadow: 0vw 1vw 2vw 0vw rgba(78, 148, 221, 0.8);
   border-radius: 2vw 2vw 2vw 2vw;
+  border: 0;
   opacity: 1;
+  transition: all 0.1s;
+  &:active {
+    filter: brightness(0.9);
+    scale: 0.97;
+  }
 }
 
 .buttonText {

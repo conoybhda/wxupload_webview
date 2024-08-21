@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { urlConfig } from "@/config";
 /**
  * 文件上传的token
  */
@@ -30,10 +31,7 @@ export const getUrlParams = () => {
   token = params.token;
   maxCount.value = parseInt(params.max || 1);
   isResume.value = params.isResume === "true";
-  Url =
-    params.istest === "true"
-      ? "https://api.test.recruitment.ziqiang.net.cn/api/files/token/"
-      : "https://api.recruitment.ziqiang.net.cn/api/files/token/";
+  Url = urlConfig[params.env || "devTest"];
   return params;
 };
 

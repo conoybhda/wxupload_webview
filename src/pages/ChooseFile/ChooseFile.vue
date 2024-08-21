@@ -21,22 +21,22 @@
 <script setup lang="ts">
 import { isResume, maxCount } from "@/api/urlParams";
 import { nowStatus, fileList } from "@/utils/values";
+import { nextTick } from "vue";
 
-const getfile = (e: any) => {
-  let files = e.target.files as FileList;
+const getfile = async (e: any) => {
+  nowStatus.value = "uploadFile";
   let list = [];
-  let defaultChoosen = true;
-  if (files.length > maxCount.value) {
-    defaultChoosen = false;
-    nowStatus.value = "uploadFile";
-  } else {
-    nowStatus.value = "uploading";
-  }
-  for (const file of files) {
-    list.push({ file, isChoosen: defaultChoosen });
+  for (const file of e.target.files as FileList) {
+    list.push({ file, isChoosen: false });
   }
   fileList.value = list;
-  console.log(fileList.value);
+  if (fileList.value.length <= maxCount.value) {
+    fileList.value.forEach((file) => {
+      file.isChoosen = true;
+    });
+    await nextTick();
+    nowStatus.value = "uploading";
+  }
 };
 </script>
 
@@ -77,8 +77,8 @@ const getfile = (e: any) => {
     margin-top: 3vh;
     transition: all 0.1s;
     &:active {
-      background: rgba(255, 255, 255, 0.2);
-      scale: 0.95;
+      filter: brightness(0.9);
+      scale: 0.97;
     }
     .icon {
       display: block;

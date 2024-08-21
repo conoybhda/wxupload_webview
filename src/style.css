@@ -14,4 +14,14 @@
   top: 0;
   left: 0;
   background-image: linear-gradient(#3da4f2, #3670cf);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.disable {
+  filter: grayscale(1) brightness(0.9) !important;
+  pointer-events: none !important;
+  scale: 0.99 !important;
 }
