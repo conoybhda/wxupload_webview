@@ -6,7 +6,7 @@ import axios, { AxiosProgressEvent } from "axios";
  * @param f 上传的文件
  * @param onUploadProgress 获取上传进度的接口
  */
-export const uploadFile = async (
+const upload = async (
   f: File,
   onUploadProgress?: (ProgressEvent: AxiosProgressEvent) => void
 ) => {
@@ -24,7 +24,6 @@ export const uploadFile = async (
     });
     let { OSSAccessKeyId, callback, expire, host, key, policy, signature } =
       getToken.data.data;
-    console.log(host);
     if (new Date(expire) > new Date()) {
       let formData = new FormData();
       formData.append("OSSAccessKeyId", OSSAccessKeyId);
@@ -47,24 +46,25 @@ export const uploadFile = async (
       if (upload.status === 200) {
         console.log("上传成功");
       }
-      console.log(upload);
       return upload;
     } else {
       console.log("token过期");
     }
+    return getToken;
   } catch (e) {
     console.log(e);
   }
+  return { status: 500, data: { message: "上传失败" } };
 };
 
 /**
  * 模拟上传文件
  */
-export const uploadFileLocal = async (
+const uploadFileLocal = async (
   f: File,
   onUploadProgress?: (ProgressEvent: AxiosProgressEvent) => void
 ) => {
-  for (let i = 0; i <= 100; i+=2) {
+  for (let i = 0; i <= 100; i += 2) {
     onUploadProgress &&
       onUploadProgress({
         progress: i,
@@ -77,3 +77,6 @@ export const uploadFileLocal = async (
   console.log("上传成功");
   return { status: 200 };
 };
+
+export const uploadFile =
+  import.meta.env.MODE === "loc" ? uploadFileLocal : upload;

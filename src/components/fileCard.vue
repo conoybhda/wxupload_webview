@@ -23,7 +23,7 @@
 </template>
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from "vue";
-import { uploadFile, uploadFileLocal } from "@/api/uploadFile";
+import { uploadFile } from "@/api/uploadFile";
 import { getFileIcon } from "@/api/getFileIcon";
 import { nowStatus } from "@/utils/values";
 
@@ -54,7 +54,7 @@ nextTick(() => {
 watch(nowStatus, async () => {
   if (nowStatus.value == "uploading") {
     try {
-      const res = await uploadFileLocal(props.file, (e) => {
+      const res = await uploadFile(props.file, (e) => {
         progress = e.progress || 0;
         drawProgress();
       });

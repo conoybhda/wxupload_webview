@@ -1,4 +1,9 @@
 <template>
+  <Progress
+    v-if="nowStatus == 'uploading'"
+    class="progress"
+    :percent="progress"
+  ></Progress>
   <div :class="'fileListBox ' + nowStatus">
     <text class="fltext">文件列表</text>
     <text v-if="nowStatus" class="sugMaxCount"
@@ -20,9 +25,12 @@
 </template>
 <script setup lang="ts">
 import { maxCount } from "@/api/urlParams";
-import fileCard from "@/components/fileCard.vue";
 import { fileList, nowStatus } from "@/utils/values";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import fileCard from "@/components/fileCard.vue";
+import Progress from "@/components/progress.vue";
+
+const progress = ref(0);
 
 const choosable = computed(() => {
   let res = 0;
@@ -32,24 +40,38 @@ const choosable = computed(() => {
   return res < maxCount.value;
 });
 
-const upload = () => {
+const upload = async () => {
   // 筛选选中的文件
   fileList.value = fileList.value.filter((file) => file.isChoosen);
   // 切换状态
   nowStatus.value = "uploading";
+
+  for (let i = 0; i <= 100; i += 2) {
+    console.log(i);
+    progress.value = i;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
 };
 </script>
 <style scoped lang="less">
+.progress {
+  position: absolute;
+  top: 20vw;
+  left: 25vw;
+}
 .fileListBox {
+  position: absolute;
   transition: all 0.5s;
   width: 80vw;
+  left: 10vw;
   &.uploadFile {
-    position: relative;
-    margin-top: -15vh;
+    top: 6vh;
   }
   &.uploading {
-    position: relative;
-    margin-top: 20vh;
+    top: calc(5vh + 70vw);
+    .fileList {
+      max-height: calc(80vh - 70vw);
+    }
   }
   .fltext {
     position: relative;
@@ -70,93 +92,21 @@ const upload = () => {
   .fileList {
     position: relative;
     margin-top: 8px;
-    width: 100%;
+    width: 80vw;
     max-height: 60vh;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
     .fileCard {
       position: relative;
       margin-left: auto;
       margin-right: auto;
       margin-top: 2vh;
       margin-bottom: 2vh;
-      width: 96%;
-      height: 8vh;
+      width: 78vw;
+      height: 18vw;
       border-radius: 2vh;
     }
   }
-}
-
-.circleText {
-  width: 18vw;
-  height: 13vw;
-  font-size: 9vw;
-  font-weight: 400;
-  fill: #ffffff;
-}
-.circle {
-  fill: none;
-  width: 100vw;
-  height: 100vw;
-  stroke-dasharray: 314;
-  stroke-dashoffset: 314;
-  stroke-linecap: round;
-  transition: all 0.5s;
-  transform: rotate(-90deg);
-  transform-origin: center;
-  transform-box: fill-box;
-}
-.loadCircle {
-  position: absolute;
-  top: 62vw;
-  left: 32vw;
-  width: 35vw;
-  height: 35vw;
-  overflow: visible;
-}
-.load {
-  position: absolute;
-  top: 43vw;
-  left: 67vw;
-  width: 7vw;
-  height: 7vw;
-  overflow: visible;
-}
-.uploadText {
-  position: absolute;
-  top: 41vw;
-  left: 29vw;
-  width: 35vw;
-  height: 10vw;
-  font-size: 7vw;
-  font-family: Source Han Sans SC-Regular, Source Han Sans SC;
-  font-weight: 400;
-  color: #ffffff;
-  z-index: 99;
-}
-
-.center {
-  position: absolute;
-  top: 6vw;
-  left: 6vw;
-  width: 23vw;
-  height: 23vw;
-  background: #3b98ea;
-  box-shadow: 1vw 1vw 2vw 0vw rgba(0, 0, 0, 0.16);
-  border-radius: 50%;
-  opacity: 1;
-  z-index: 101;
-}
-
-.bigupload {
-  position: absolute;
-  top: 62vw;
-  left: 32vw;
-  width: 35vw;
-  height: 35vw;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 50%;
-  opacity: 1;
-  z-index: 99;
 }
 
 .uploadButton {
@@ -167,6 +117,8 @@ const upload = () => {
   align-items: center;
   width: 28vw;
   height: 13vw;
+  margin-top: auto;
+  margin-bottom: calc(15vh - 14vw);
   background: #ffffffce;
   box-shadow: 0vw 1vw 2vw 0vw rgba(78, 148, 221, 0.8);
   border-radius: 2vw 2vw 2vw 2vw;
@@ -177,14 +129,13 @@ const upload = () => {
     filter: brightness(0.9);
     scale: 0.97;
   }
-}
-
-.buttonText {
-  width: 12vw;
-  height: 9vw;
-  font-size: 6vw;
-  font-family: Source Han Sans SC-Regular, Source Han Sans SC;
-  font-weight: 400;
-  color: #4e94dd;
+  .buttonText {
+    width: 12vw;
+    height: 9vw;
+    font-size: 6vw;
+    font-family: Source Han Sans SC-Regular, Source Han Sans SC;
+    font-weight: 400;
+    color: #4e94dd;
+  }
 }
 </style>
