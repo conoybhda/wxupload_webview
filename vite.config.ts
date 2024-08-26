@@ -13,16 +13,6 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": {
-        target: "https://api.recruitment.ziqiang.net.cn/api",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-      "/test": {
-        target: "https://api.test.recruitment.ziqiang.net.cn/api",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/test/, ""),
-      },
     },
   },
 });
