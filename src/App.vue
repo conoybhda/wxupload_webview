@@ -3,6 +3,7 @@
   <UploadFile
     v-else-if="nowStatus == 'uploadFile' || nowStatus == 'uploading'"
   />
+  <Finish v-else-if="nowStatus == 'finish'"></Finish>
 </template>
 
 <script setup lang="ts">
@@ -11,6 +12,7 @@ import { getUrlParams } from "@/api/urlParams";
 import { nowStatus } from "@/utils/values";
 import ChooseFile from "./pages/ChooseFile/ChooseFile.vue";
 import UploadFile from "./pages/UploadFile/UploadFile.vue";
+import Finish from "./pages/Finish/Finish.vue";
 
 onMounted(() => {
   getUrlParams();

@@ -61,6 +61,7 @@ const uploadEnd = () => {
     progress.value = Math.floor((nowUploadFileLength * 100) / uploadFileLength);
   } else {
     progress.value = 100;
+    nowStatus.value = "finish";
   }
 };
 </script>

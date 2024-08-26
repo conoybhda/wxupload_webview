@@ -58,21 +58,27 @@ const upload = async (
 };
 
 /**
+ * 模拟上传速度,单位:byte/s
+ */
+const locUploadSpeed = 10000;
+
+/**
  * 模拟上传文件
  */
 const uploadFileLocal = async (
   f: File,
   onUploadProgress?: (ProgressEvent: AxiosProgressEvent) => void
 ) => {
-  let i = 0;
+  let size = f.size;
+  let nowUploadSize = 0;
   while (true) {
-    i += Math.round(Math.random() * 5);
-    if (i > 100) {
+    nowUploadSize += locUploadSpeed;
+    if (nowUploadSize > size) {
       break;
     }
     onUploadProgress &&
       onUploadProgress({
-        progress: i,
+        progress: Math.floor((nowUploadSize / size) * 100),
         bytes: 0,
         lengthComputable: false,
         loaded: 0,
