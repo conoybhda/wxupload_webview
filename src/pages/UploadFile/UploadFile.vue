@@ -16,6 +16,7 @@
         v-model="file.isChoosen"
         :choosable="choosable || file.isChoosen"
         :file="file.file"
+        @upload-end="uploadEnd"
       />
     </div>
   </div>
@@ -26,11 +27,17 @@
 <script setup lang="ts">
 import { maxCount } from "@/api/urlParams";
 import { fileList, nowStatus } from "@/utils/values";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import fileCard from "@/components/fileCard.vue";
 import Progress from "@/components/progress.vue";
 
 const progress = ref(0);
+let uploadFileLength = 0;
+let nowUploadFileLength = 0;
+
+onMounted(() => {
+  uploadFileLength = fileList.value.length;
+});
 
 const choosable = computed(() => {
   let res = 0;
@@ -43,13 +50,17 @@ const choosable = computed(() => {
 const upload = async () => {
   // 筛选选中的文件
   fileList.value = fileList.value.filter((file) => file.isChoosen);
+  uploadFileLength = fileList.value.length;
   // 切换状态
   nowStatus.value = "uploading";
+};
 
-  for (let i = 0; i <= 100; i += 2) {
-    console.log(i);
-    progress.value = i;
-    await new Promise((resolve) => setTimeout(resolve, 100));
+const uploadEnd = () => {
+  nowUploadFileLength++;
+  if (nowUploadFileLength < uploadFileLength) {
+    progress.value = Math.floor((nowUploadFileLength * 100) / uploadFileLength);
+  } else {
+    progress.value = 100;
   }
 };
 </script>

@@ -38,6 +38,8 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(["uploadEnd"]);
+
 const isChoosen = defineModel<boolean>();
 const canvas = ref<HTMLCanvasElement | null>(null);
 const uploadEnd = ref(false);
@@ -59,6 +61,7 @@ watch(nowStatus, async () => {
         drawProgress();
       });
       if (res.status == 200) {
+        emits("uploadEnd");
         uploadEnd.value = true;
       }
     } catch (e) {

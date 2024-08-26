@@ -64,7 +64,12 @@ const uploadFileLocal = async (
   f: File,
   onUploadProgress?: (ProgressEvent: AxiosProgressEvent) => void
 ) => {
-  for (let i = 0; i <= 100; i += 2) {
+  let i = 0;
+  while (true) {
+    i += Math.round(Math.random() * 5);
+    if (i > 100) {
+      break;
+    }
     onUploadProgress &&
       onUploadProgress({
         progress: i,

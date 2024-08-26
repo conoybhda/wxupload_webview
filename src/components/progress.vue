@@ -67,7 +67,7 @@ defineProps({
     fill: none;
     stroke-width: var(--border-width);
     stroke-linecap: round;
-    transition: stroke-dasharray 0.4s linear, stroke 0.3s;
+    transition: stroke-dasharray 0.8s ease-in-out;
   }
   .progress-value {
     opacity: var(--percent);
