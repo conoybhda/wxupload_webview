@@ -1,28 +1,39 @@
 <template>
-  <Progress
-    v-if="nowStatus == 'uploading'"
-    class="progress"
-    :percent="progress"
-  ></Progress>
-  <div :class="'fileListBox ' + nowStatus">
-    <text class="fltext">文件列表</text>
-    <text v-if="nowStatus" class="sugMaxCount"
-      >您最多可以选择{{ maxCount }}个文件</text
-    >
-    <div class="fileList">
-      <fileCard
-        class="fileCard"
-        v-for="file in fileList"
-        v-model="file.isChoosen"
-        :choosable="choosable || file.isChoosen"
-        :file="file.file"
-        @upload-end="uploadEnd"
-      />
+  <div :style="'width:100%;height:100%'">
+    <Transition name="tran" mode="out-in">
+      <Progress
+        v-if="nowStatus == 'uploading'"
+        class="progress"
+        :percent="progress"
+      ></Progress>
+      <Success v-else-if="nowStatus == 'finish'" class="progress" />
+    </Transition>
+    <div :class="'fileListBox ' + nowStatus">
+      <text class="fltext">文件列表</text>
+      <text v-if="nowStatus" class="sugMaxCount"
+        >您最多可以选择{{ maxCount }}个文件</text
+      >
+      <div class="fileList">
+        <fileCard
+          class="fileCard"
+          v-for="(file, index) in fileList"
+          :key="file.file.name"
+          :style="'animation-delay: ' + index * 100 + 'ms'"
+          v-model="file.isChoosen"
+          :choosable="choosable || file.isChoosen"
+          :file="file.file"
+          @upload-end="uploadEnd"
+        />
+      </div>
     </div>
+    <button
+      v-if="nowStatus == 'uploadFile'"
+      class="uploadButton"
+      @click="upload"
+    >
+      <text class="buttonText">上传</text>
+    </button>
   </div>
-  <button v-if="nowStatus == 'uploadFile'" class="uploadButton" @click="upload">
-    <text class="buttonText">上传</text>
-  </button>
 </template>
 <script setup lang="ts">
 import { maxCount } from "@/api/urlParams";
@@ -30,6 +41,7 @@ import { fileList, nowStatus } from "@/utils/values";
 import { computed, onMounted, ref } from "vue";
 import fileCard from "@/components/fileCard.vue";
 import Progress from "@/components/progress.vue";
+import Success from "@/components/success.vue";
 
 const progress = ref(0);
 let uploadFileLength = 0;
@@ -68,6 +80,7 @@ const uploadEnd = () => {
 <style scoped lang="less">
 .progress {
   position: absolute;
+  display: block;
   top: 20vw;
   left: 25vw;
 }
@@ -79,7 +92,8 @@ const uploadEnd = () => {
   &.uploadFile {
     top: 6vh;
   }
-  &.uploading {
+  &.uploading,
+  &.finish {
     top: calc(5vh + 70vw);
     .fileList {
       max-height: calc(80vh - 70vw);
@@ -117,20 +131,33 @@ const uploadEnd = () => {
       width: 78vw;
       height: 18vw;
       border-radius: 2vh;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-in-out both;
+    }
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
   }
 }
 
 .uploadButton {
-  position: relative;
-  margin-top: 3vh;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 28vw;
   height: 13vw;
-  margin-top: auto;
-  margin-bottom: calc(15vh - 14vw);
+  left: 50vw;
+  transform: translateX(-50%);
+  top: auto;
+  bottom: calc(15vh - 14vw);
   background: #ffffffce;
   box-shadow: 0vw 1vw 2vw 0vw rgba(78, 148, 221, 0.8);
   border-radius: 2vw 2vw 2vw 2vw;
@@ -149,5 +176,19 @@ const uploadEnd = () => {
     font-weight: 400;
     color: #4e94dd;
   }
+}
+
+.tran-enter-active,
+.tran-leave-active {
+  transition: all 0.6s;
+}
+
+.tran-leave-to {
+  opacity: 0;
+  transform: rotateY(60deg);
+}
+.tran-enter-from {
+  opacity: 0;
+  transform: rotateY(-60deg);
 }
 </style>
