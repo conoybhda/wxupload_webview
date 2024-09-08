@@ -51,24 +51,33 @@ nextTick(() => {
   if (!ctx) return;
   ctx.fillStyle = "#4e94dd";
   ctx.strokeStyle = "#4e94dd";
+  // 进行初始化
+  if (nowStatus.value == "uploading") {
+    upload();
+  }
 });
 
 watch(nowStatus, async () => {
   if (nowStatus.value == "uploading") {
-    try {
-      const res = await uploadFile(props.file, (e) => {
-        progress = e.progress || 0;
-        drawProgress();
-      });
-      if (res.status == 200) {
-        emits("uploadEnd");
-        uploadEnd.value = true;
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    await upload();
   }
 });
+
+// 文件上传
+const upload = async () => {
+  try {
+    const res = await uploadFile(props.file, (e) => {
+      progress = e.progress || 0;
+      drawProgress();
+    });
+    if (res.status == 200) {
+      emits("uploadEnd");
+      uploadEnd.value = true;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 // 展示信息计算
 const showInfo = computed(() => {

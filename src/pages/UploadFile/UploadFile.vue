@@ -48,6 +48,7 @@ let uploadFileLength = 0;
 let nowUploadFileLength = 0;
 
 onMounted(() => {
+  // 初始化状态
   uploadFileLength = fileList.value.length;
 });
 
