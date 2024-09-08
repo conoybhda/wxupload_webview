@@ -16,6 +16,7 @@
       <div class="fileList">
         <fileCard
           class="fileCard"
+          :class="nowStatus == 'uploadFile' ? 'fileFadeIn' : ''"
           v-for="(file, index) in fileList"
           :key="file.file.name"
           :style="'animation-delay: ' + index * 100 + 'ms'"
@@ -132,6 +133,8 @@ const uploadEnd = () => {
       width: 78vw;
       height: 18vw;
       border-radius: 2vh;
+    }
+    .fileFadeIn {
       opacity: 0;
       animation: fadeIn 0.5s ease-in-out both;
     }
