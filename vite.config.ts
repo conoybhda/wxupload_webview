@@ -13,6 +13,12 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // 本地开发代理
+      "/api": {
+        target: "",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
     },
   },
 });
