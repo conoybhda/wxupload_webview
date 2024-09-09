@@ -13,26 +13,21 @@ let Url = "";
  * 默认为1
  */
 let maxCount = ref(1);
-/**
- * 上传为简历或普通文件
- * false为普通文件
- */
-let isResume = ref(false);
 
 export const getUrlParams = () => {
   const params: { [key: string]: any } = {};
   const search = window.location.search.split("?")[1];
   if (!search) return params;
+  // 解构url参数
   search.split("&").forEach((param) => {
     const [key, value] = param.split("=");
     params[key] = value;
   });
-
+  // 获取url参数
   token = params.token;
   maxCount.value = parseInt(params.max || 1);
-  isResume.value = params.isResume === "true";
-  Url = urlConfig[params.env || "devTest"];
+  Url = urlConfig[params.env || "default"];
   return params;
 };
 
-export { token, Url, maxCount, isResume };
+export { token, Url, maxCount };

@@ -4,10 +4,10 @@
 
     <label for="chooseFileButton" class="button">
       <img src="@/assets/upload.svg" alt="" class="icon" />
-      <text class="text">{{ isResume ? "简历" : "文件" }}上传</text>
+      <text class="text">{{ "文件" }}上传</text>
     </label>
     <input
-      :accept="isResume ? '.doc,.docx,.pdf' : ''"
+      :accept="''"
       type="file"
       id="chooseFileButton"
       :multiple="maxCount > 1"
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { isResume, maxCount } from "@/api/urlParams";
+import { maxCount } from "@/api/urlParams";
 import { nowStatus, fileList } from "@/utils/values";
 import { nextTick } from "vue";
 
