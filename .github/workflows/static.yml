@@ -37,9 +37,9 @@ jobs:
           node-version: 20.x
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v4
         with:
-          version: 8.7.5 # choose your pnpm version
+          version: 9 # choose your pnpm version
           run_install: true
 
       - name: Build (Generate static files)
