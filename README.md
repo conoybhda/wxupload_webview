@@ -1,5 +1,14 @@
-# Vue 3 + TypeScript + Vite
+# 微信小程序文件上传webview
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+由于微信小程序(手机端)文件上传限制在微信聊天文件的获取，通过webview绕过微信的文件获取api从而上传本地的文件。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+### 使用方法
+
+1. `config.ts` 修改为自己的url(直接通过param传url容易引起一些麻烦)
+2. `api/uploadFile.ts` 中的 `upload` 函数修改为自己的文件上传方法
+3. `api/urlParams.ts` 中可以增加自己的传参并在其他文件中import使用
+
+### 开发和部署
+
+1. `pnpm dev:loc` 将调用模拟上传函数以进行动画等行为的开发
+2. `pnpm dev` 将进行正常的本地开发
