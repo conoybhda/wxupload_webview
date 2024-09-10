@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:loc": "vite --mode loc",
     "build": "vue-tsc -b && vite build",
+    "build:loc": "vue-tsc -b && vite build --mode loc",
     "preview": "vite preview"
   },
   "dependencies": {
