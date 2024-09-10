@@ -21,6 +21,15 @@ export const fileIconConfig: { [key: string]: string } = {
 };
 
 export const getFileIcon = (fileType: string) => {
+  console.log(fileType);
+  console.log(
+    new URL(
+      `../assets/fileIcons/${
+        fileIconConfig[fileType.toUpperCase()] || "default.svg"
+      }`,
+      import.meta.url
+    ).href
+  );
   return new URL(
     `../assets/fileIcons/${
       fileIconConfig[fileType.toUpperCase()] || "default.svg"
