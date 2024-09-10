@@ -11,7 +11,7 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  base: "./",
+  base: "/wxupload_webview/",
   server: {
     proxy: {
       // 本地开发代理
